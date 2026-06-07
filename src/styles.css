@@ -1,0 +1,143 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-muted: #eef3f2;
+  --surface-soft: #f9fbfa;
+  --text: #17211f;
+  --muted: #66736f;
+  --border: #dbe2df;
+  --primary: #176b5b;
+  --primary-dark: #0f4d42;
+  --danger: #b42318;
+  --warning: #996400;
+  --success: #157347;
+  --shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --bg: #000000;
+  --surface: #0b0f0e;
+  --surface-muted: #111816;
+  --surface-soft: #080b0a;
+  --text: #f2f7f5;
+  --muted: #9ca9a5;
+  --border: #1f2a27;
+  --primary: #4bd1b5;
+  --primary-dark: #8ff5df;
+  --danger: #ff8f86;
+  --warning: #f2c76d;
+  --success: #6ee7a2;
+  --shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn {
+  align-items: center;
+  background: var(--primary);
+  color: #fff;
+  display: inline-flex;
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.65rem 1rem;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.btn.secondary {
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.btn.secondary:hover:not(:disabled) {
+  background: var(--surface-soft);
+}
+
+.btn.danger {
+  background: #f7dfdc;
+  color: var(--danger);
+}
+
+.btn.danger:hover:not(:disabled) {
+  background: #efc8c3;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  min-height: 2.55rem;
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(23, 107, 91, 0.14);
+  outline: 0;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.empty-state {
+  color: var(--muted);
+  display: grid;
+  gap: 0.35rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-state strong {
+  color: var(--text);
+}

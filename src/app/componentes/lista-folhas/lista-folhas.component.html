@@ -1,0 +1,78 @@
+<section class="list-panel" [class.recolhida]="recolhida">
+  <button
+    *ngIf="recolhida"
+    type="button"
+    class="botao-expandir"
+    (click)="recolhimentoAlterado.emit()"
+    aria-label="Mostrar lista de folhas"
+    title="Mostrar lista"
+  >
+    →
+  </button>
+
+  <div class="panel-head" *ngIf="!recolhida">
+    <div>
+      <h2>Folhas</h2>
+      <p>{{ folhas.length }} registro(s)</p>
+    </div>
+
+    <label class="status-filter">
+      <span>Status</span>
+      <select [formControl]="filtroControl">
+        <option value="todas">Todas</option>
+        <option value="aberta">Em aberto</option>
+        <option value="fechada">Fechadas</option>
+      </select>
+    </label>
+  </div>
+
+  <p *ngIf="!recolhida && carregando" class="empty-state">Carregando folhas...</p>
+
+  <div *ngIf="!recolhida && !carregando && folhas.length === 0" class="empty-state">
+    <strong>Nenhuma folha encontrada</strong>
+    <span>Use o formulario acima para iniciar uma nova folha.</span>
+  </div>
+
+  <div class="lista-folhas" *ngIf="!recolhida && !carregando && folhas.length > 0">
+    <article
+      *ngFor="let folha of folhas; trackBy: identificarFolha"
+      class="linha-folha"
+      [class.active]="folha.id === folhaSelecionadaId"
+      (click)="selecionada.emit(folha)"
+    >
+      <div class="linha-principal">
+        <div>
+          <h3>{{ folha.nomeFuncionario }}</h3>
+          <span class="badge" [class.closed]="folha.status === 'fechada'">
+            {{ textoStatus(folha.status) }}
+          </span>
+        </div>
+        <strong>{{ totalLiquido(folha) | moedaBrl }}</strong>
+      </div>
+
+      <div class="acoes-linha">
+        <span>{{ folha.itens.length }} item(ns)</span>
+        <button
+          type="button"
+          class="btn danger"
+          (click)="$event.stopPropagation(); removida.emit(folha.id)"
+          aria-label="Remover folha"
+        >
+          Remover
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <div class="rodape-recolher" *ngIf="!recolhida">
+    <button
+      type="button"
+      class="botao-recolher"
+      (click)="recolhimentoAlterado.emit()"
+      aria-label="Ocultar lista de folhas"
+      title="Ocultar lista"
+    >
+      ←
+    </button>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+<main class="shell">
+  <header class="topbar">
+    <div class="titulo-topo">
+      <div>
+        <p class="eyebrow">Gestao de folha</p>
+        <h1>Folhas de pagamento</h1>
+      </div>
+
+      <button type="button" class="botao-tema" (click)="alternarTema()" [attr.aria-label]="temaEscuro ? 'Ativar modo claro' : 'Ativar modo escuro'">
+        {{ temaEscuro ? 'Claro' : 'Escuro' }}
+      </button>
+    </div>
+
+    <form class="nova-folha" [formGroup]="novaFolhaForm" (ngSubmit)="criarFolha()">
+      <div class="field">
+        <label for="newEmployeeName">Novo funcionario</label>
+        <input id="newEmployeeName" type="text" formControlName="nomeFuncionario" placeholder="Nome do funcionario" maxlength="200">
+        <p class="error" *ngIf="novaFolhaForm.controls.nomeFuncionario.touched && novaFolhaForm.controls.nomeFuncionario.invalid">
+          Informe entre 3 e 200 caracteres.
+        </p>
+      </div>
+      <button type="submit" class="btn" [disabled]="ocupado">Iniciar folha</button>
+    </form>
+  </header>
+
+  <div class="alert" *ngIf="mensagemErro">
+    {{ mensagemErro }}
+  </div>
+
+  <div class="workspace" [class.lista-recolhida]="listaRecolhida">
+    <app-lista-folhas
+      [folhas]="folhas"
+      [folhaSelecionadaId]="folhaSelecionada?.id"
+      [carregando]="carregando"
+      [recolhida]="listaRecolhida"
+      (selecionada)="selecionarFolha($event)"
+      (removida)="removerFolha($event)"
+      (filtroAlterado)="carregarFolhas($event)"
+      (recolhimentoAlterado)="alternarLista()"
+    />
+
+    <app-detalhe-folha
+      [folha]="folhaSelecionada"
+      [ocupado]="ocupado"
+      (nomeFuncionarioSalvo)="salvarNomeFuncionario($event)"
+      (itemAdicionado)="adicionarItem($event)"
+      (itemSalvo)="salvarItem($event)"
+      (itemRemovido)="removerItem($event)"
+      (fechada)="fecharFolha()"
+      (reaberta)="reabrirFolha()"
+    />
+  </div>
+</main>

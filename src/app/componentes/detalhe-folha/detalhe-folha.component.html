@@ -1,0 +1,113 @@
+<section class="painel-detalhe" *ngIf="folha; else noSelection">
+  <header class="cabecalho-detalhe">
+    <div>
+      <p class="eyebrow">Folha #{{ folha.id }}</p>
+      <h2>{{ folha.nomeFuncionario }}</h2>
+    </div>
+
+    <div class="acoes-status">
+      <span class="badge" [class.closed]="estaFechada">{{ estaFechada ? 'Fechada' : 'Em aberto' }}</span>
+      <button *ngIf="!estaFechada" type="button" class="btn" [disabled]="ocupado || resumo.totalLiquido <= 0" (click)="fechada.emit()">
+        Fechar
+      </button>
+      <button *ngIf="estaFechada" type="button" class="btn secondary" [disabled]="ocupado" (click)="reaberta.emit()">
+        Reabrir
+      </button>
+    </div>
+  </header>
+
+  <div class="resumo-grid">
+    <div>
+      <span>Entradas</span>
+      <strong>{{ resumo.entradas | moedaBrl }}</strong>
+    </div>
+    <div>
+      <span>Descontos</span>
+      <strong>{{ resumo.descontos | moedaBrl }}</strong>
+    </div>
+    <div>
+      <span>Total liquido</span>
+      <strong>{{ resumo.totalLiquido | moedaBrl }}</strong>
+    </div>
+  </div>
+
+  <form class="formulario-funcionario" [formGroup]="funcionarioForm" (ngSubmit)="salvarNomeFuncionario()">
+    <div class="field">
+      <label for="nomeFuncionario">Nome do funcionario</label>
+      <input id="nomeFuncionario" type="text" formControlName="nomeFuncionario" maxlength="200">
+      <p class="error" *ngIf="funcionarioForm.controls.nomeFuncionario.touched && funcionarioForm.controls.nomeFuncionario.invalid">
+        Informe entre 3 e 200 caracteres.
+      </p>
+    </div>
+    <button type="submit" class="btn secondary" [disabled]="ocupado || estaFechada">Salvar nome</button>
+  </form>
+
+  <form class="formulario-item" [formGroup]="itemForm" (ngSubmit)="salvarItem()">
+    <div class="field">
+      <label for="description">Descricao</label>
+      <input id="description" type="text" formControlName="descricao" maxlength="50">
+      <p class="error" *ngIf="itemForm.controls.descricao.touched && itemForm.controls.descricao.invalid">
+        Informe entre 2 e 50 caracteres.
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="type">Tipo</label>
+      <select id="type" formControlName="tipo">
+        <option value="entrada">Entrada</option>
+        <option value="desconto">Desconto</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="value">Valor</label>
+      <input id="value" type="number" formControlName="valor" min="0.01" step="0.01">
+      <p class="error" *ngIf="itemForm.controls.valor.touched && itemForm.controls.valor.invalid">
+        Informe um valor maior que zero.
+      </p>
+    </div>
+
+    <div class="acoes-formulario">
+      <button type="submit" class="btn" [disabled]="ocupado || estaFechada">
+        {{ itemEmEdicaoId ? 'Salvar item' : 'Adicionar item' }}
+      </button>
+      <button *ngIf="itemEmEdicaoId" type="button" class="btn secondary" (click)="cancelarEdicaoItem()">Cancelar</button>
+    </div>
+  </form>
+
+  <div class="tabela-itens" *ngIf="folha.itens.length > 0; else emptyItems">
+    <div class="linha-tabela cabecalho-tabela">
+      <span>Descricao</span>
+      <span>Tipo</span>
+      <span>Valor</span>
+      <span>Acoes</span>
+    </div>
+
+    <div class="linha-tabela" *ngFor="let item of folha.itens">
+      <span>{{ item.descricao }}</span>
+      <span>{{ textoTipoItem(item.tipo) }}</span>
+      <strong>{{ item.valor | moedaBrl }}</strong>
+      <div class="acoes-tabela">
+        <button type="button" class="btn secondary" [disabled]="ocupado || estaFechada" (click)="editarItem(item)">Editar</button>
+        <button type="button" class="btn danger" [disabled]="ocupado || estaFechada" (click)="itemRemovido.emit(item.id)">Remover</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyItems>
+    <div class="estado-itens-vazio">
+      <strong>Nenhum item adicionado</strong>
+      <p>Inclua entradas e descontos para calcular o total liquido da folha.</p>
+    </div>
+  </ng-template>
+</section>
+
+<ng-template #noSelection>
+  <section class="painel-detalhe placeholder">
+    <div class="bloco-inicial">
+      <span>Folhas</span>
+      <h2>Comece criando uma folha</h2>
+      <p>Informe o nome do funcionario no topo para adicionar itens, calcular totais e fechar a folha.</p>
+    </div>
+  </section>
+</ng-template>

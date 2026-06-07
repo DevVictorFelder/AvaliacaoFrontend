@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.npm-cache/
+
+# Angular
+.angular/
+dist/
+coverage/
+
+# Deploy/local tooling
+.vercel/
+.netlify/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+work/*.log
+
+# Local folders
+work/
+outputs/
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
