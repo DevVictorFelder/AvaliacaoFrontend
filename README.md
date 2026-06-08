@@ -88,5 +88,4 @@ src/
 O projeto encontra-se publicado na plataforma Vercel e disponível para acesso online.
 
 ## Autor
-
 **Victor Felder**
